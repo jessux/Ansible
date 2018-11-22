@@ -1,0 +1,2 @@
+hosts: localhost
+role: local_setup

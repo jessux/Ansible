@@ -1,0 +1,54 @@
+---
+#### TAGS ####
+## download ##
+## users    ##
+## setup    ##
+## parse    ##
+## install  ##
+## config   ##
+##############
+
+   # install needed packages
+  - include: packages_redhat.yml
+    when: ansible_os_family == "RedHat"
+
+   # get the binairies
+  - include: get_binaries.yml
+    tags: setup
+
+   # create users
+  - include: instance_users.yml
+    tags: ['users', 'setup']
+
+   # disable selinux
+  - include: disable_selinux.yml
+    tags: setup
+
+   # add the MC ip in the remote host
+  - include: add_ACM_to_host.yml
+    tags: setup
+
+   # verify prerequisits
+  - include: check_pre_requisits.yml
+    tags: setup
+
+  - name: Parse response file
+    template: src=db2server.j2.rsp dest={{binaries[0].remote_path}}/db2server.rsp
+    tags: ['setup','parse']
+
+   # install db2
+  - include: install_db2.yml
+    tags: install
+
+  - name: Parse sql file
+    template: src=isam_access_control_db2.j2.sql dest={{sqlfile}}
+    tags: ['config','parse']
+
+   # create ISAM database
+  - include: create_database_with_file.yml
+    tags: config
+
+    # get isam data and import into database
+  - include: isam_data.yml
+    tags: config
+ 

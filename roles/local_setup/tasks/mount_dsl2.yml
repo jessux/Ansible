@@ -1,0 +1,18 @@
+---
+- name: Mount DSL2
+
+  command: "mount -t cifs -o user={{dsl2_user}},password={{dsl2_passord}} //{{dsl2_ip}}/DSL2 {{dsl2}}"
+
+  changed_when: False
+
+  register: mount
+
+  failed_when: "'error' in mount.stdout"
+
+- name: Verify mount
+
+  debug:
+    verbosity: 1
+    var: mount
+
+
