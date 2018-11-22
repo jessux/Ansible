@@ -1,0 +1,116 @@
+** General Options
+
+PROD                      = {{resp.prod}}
+
+FILE                      = {{resp.file}}
+
+LIC_AGREEMENT             = {{resp.lic_agreement}}
+
+INSTALL_TYPE              = {{resp.install_type}}
+
+
+{%for inst in db2_instances %}
+
+{%if create_instances == true %}
+
+INSTANCE                  = {{inst.instance}}
+
+{{inst.instance}}.NAME             = {{inst.name}}
+
+{{inst.instance}}.GROUP_NAME       = {{inst.group_name}}
+
+{{inst.instance}}.HOME_DIRECTORY   = {{inst.home_directory}}
+
+{{inst.instance}}.PASSWORD         = {{inst.password}}
+
+{{inst.instance}}.AUTOSTART        = {{inst.autostart}}
+
+{{inst.instance}}.START_DURING_INSTALL = {{inst.start_during_install}}
+
+{{inst.instance}}.SVCENAME         = db2i2_{{inst.name}}
+
+{{inst.instance}}.PORT_NUMBER      = {{inst.port}}
+
+{{inst.instance}}.FCM_PORT_NUMBER  = {{inst.fcm_port}}
+
+{{inst.instance}}.MAX_LOGICAL_NODES = 4
+
+{{inst.instance}}.FEDERATED        = YES
+
+{{inst.instance}}.AUTHENTICATION   = SERVER
+
+{{inst.instance}}.FENCED_USERNAME  = {{inst.fenced_username}}
+
+{{inst.instance}}.FENCED_GROUP_NAME = {{inst.fenced_group_name}}
+
+{{inst.instance}}.FENCED_HOME_DIRECTORY = {{inst.fenced_home_directory}}
+
+{{inst.instance}}.FENCED_PASSWORD  = {{inst.fenced_password}}
+
+
+{% if inst.dbm_params is defined %}
+
+** Instance DBM CFG Settings
+
+** -------------------------
+
+{% for key, value in inst.dbm_params.iteritems() %}
+
+{{inst.instance | upper}}.{{ key | upper}}             = {{ value }}
+
+{% endfor %}
+
+{% endif %}
+
+{% endif %}
+
+{% endfor %}
+
+
+{%if global_params is defined %}
+
+** Global Profile Registry Settings
+
+** --------------------------------
+
+{% for key, value in global_params.iteritems() %}
+
+{{ key | upper}}             = {{ value }}
+
+{% endfor %}
+
+{% endif %}
+
+DB2COMM                   = TCPIP
+
+** The following languages apply to all translated components. Enable the
+
+** language(s) you want installed. If you do not enable any language keywords,
+
+** then the English language (EN) will still be installed by default.
+
+** ---------------------------------------------------------------------------
+
+*LANG                     = BR              ** Portuguese - Brazil (pt_BR)
+
+*LANG                     = CN              ** Simplified Chinese (zh_CN)
+
+*LANG                     = CZ              ** Czech (cs_CZ)
+
+*LANG                     = DE              ** German (de_DE)
+
+*LANG                     = ES              ** Spanish (es_ES)
+
+*LANG                     = FR              ** French (fr_FR)
+
+*LANG                     = IT              ** Italian (it_IT)
+
+*LANG                     = JP              ** Japanese (ja_JP)
+
+*LANG                     = KR              ** Korean (ko_KR)
+
+*LANG                     = PL              ** Polish (pl_PL)
+
+*LANG                     = RU              ** Russian (ru_RU)
+
+*LANG                     = TW              ** Traditional Chinese (zh_TW)

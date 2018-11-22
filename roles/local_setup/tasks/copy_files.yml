@@ -1,0 +1,13 @@
+- name: Copy needed files on the controller
+
+  copy:
+
+    src: "{{dsl2}}/{{path_to_db2_in_dsl2}}/{{item}}"
+
+    dest: "/opt/ansible_files/{{item}}"
+
+    remote_src: no
+
+    force: no
+
+  with_items: "{{files}}"

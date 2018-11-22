@@ -1,0 +1,25 @@
+{
+  "os": "linux",
+  "env":
+    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=1.9.2
+  "sudo": false,
+  "branches":
+    "only":
+      - develop
+  "addons": {
+    "apt": {
+      "packages": [
+        "bzip2 kernel-devel kernel-devel-3.10.0-862.el7.x86_64 gcc make perl ansible"
+      ]
+    }
+  },
+  "python": "2.7",
+  "script": [
+    "ansible-playbook build/playbook.yml -i inventory/local.yml --syntax-check"
+  ],
+  "install": [
+    "pip install ansible",
+    "ansible --version",
+  ],
+  "language": "python"
+}
