@@ -8,12 +8,19 @@ python: "2.7"
 # Doc: https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
 
 before_install:
-  - sudo yum install epel-release
-  - sudo yum install bzip2 kernel-devel kernel-devel-3.10.0-862.el7.x86_64 gcc make perl ansible
+  - sudo apt-get update -qq
+
+install:
+  # Install Ansible.
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
 
 script:
   # Check the role/playbook's syntax.
-  - ansible-playbook tests/test.yml --syntax-check
+  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook tests/test.yml -vvvv
+  - ansible-playbook -i tests/inventory tests/test.yml -vvvv --skip-tags update,copy_host_ssh_id
+
+  # check is the user is created or not
+  - id -u tasdik | grep -q "no" && (echo "user not found" && exit 1) || (echo "user found" && exit 0)
